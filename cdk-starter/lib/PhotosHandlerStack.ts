@@ -9,23 +9,21 @@ interface PhotosHandlerStackProps extends cdk.StackProps {
 
 export class PhotosHandlerStack extends cdk.Stack {    
 
-    constructor(scope: Construct, id: string, props: PhotosHandlerStackProps) {
-        super(scope, id, props);
+  constructor(scope: Construct, id: string, props: PhotosHandlerStackProps) {
+      super(scope, id, props);
 
-        new LambdaFunction(this, 'PhotosHandler', {
-            runtime: Runtime.NODEJS_16_X,
-            handler: 'index.handler',
-            code: Code.fromInline(`
-            exports.handler = async (event) => {
-              console.log("hello!: " + process.env.TARGET_BUCKET)
-            };
-          `),
-            environment: {
-                TARGET_BUCKET: props.targetBucketArn,
-            },
+      new LambdaFunction(this, 'PhotosHandler', {
+          runtime: Runtime.NODEJS_16_X,
+          handler: 'index.handler',
+          code: Code.fromInline(`
+          exports.handler = async (event) => {
+            console.log("hello emi: " + process.env.TARGET_BUCKET)
+          };
+        `),
+          environment: {
+              TARGET_BUCKET: props.targetBucketArn
+          },
+      });
 
-        });
-
-    }
-
+  }
 }

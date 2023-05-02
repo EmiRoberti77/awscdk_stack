@@ -1,0 +1,26 @@
+{
+  "name": "emi-space-finder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.114",
+    "aws-cdk": "^2.77.0",
+    "aws-cdk-lib": "^2.77.0",
+    "constructs": "^10.2.10",
+    "esbuild": "^0.17.18",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.321.1",
+    "@types/uuid": "^9.0.1",
+    "uuid": "^9.0.0"
+  }
+}

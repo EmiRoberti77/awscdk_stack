@@ -1,3 +1,8 @@
 
+ POST https://vl9tob468h.execute-api.us-east-1.amazonaws.com/prod/spaces
+ ###
+
+
  GET https://vl9tob468h.execute-api.us-east-1.amazonaws.com/prod/spaces
  ###
+

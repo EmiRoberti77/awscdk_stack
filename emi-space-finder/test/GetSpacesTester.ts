@@ -5,9 +5,7 @@ import { handler } from "../src/services/spaces/handler"
 process.env.AWS_REGION = 'us-east-1';
 process.env.TABLE_NAME = 'SpaceTable-0e18ddc4064f'
 
+//method name inpoint for lambda coming from  ../src/services/spaces/handler
 handler({
-  httpMethod: 'POST',
-  body: JSON.stringify({
-    location: "Barcelona"
-  })
+  httpMethod: 'GET'
 } as any,{} as any);

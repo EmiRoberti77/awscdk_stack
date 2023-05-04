@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda";
 import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
 import {postspaces} from './PostPaces'
+import { getspaces } from "./GetSpaces";
 
 
 const enum HTTPMETHOD {
@@ -17,8 +18,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<
   try{
     switch(event.httpMethod){
       case HTTPMETHOD.GET:
-        httpMethod = 'httpMethod used is ' + HTTPMETHOD.GET;
-      break;
+        return await getspaces(event, dbClient);
 
       case HTTPMETHOD.POST:
         return await postspaces(event, dbClient)

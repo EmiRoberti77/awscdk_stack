@@ -1,4 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from "aws-lambda";
+import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
+import {postspaces} from './PostPaces'
+
 
 const enum HTTPMETHOD {
   GET = 'GET',
@@ -6,28 +9,33 @@ const enum HTTPMETHOD {
   NONE = 'NO HTTP METHOD FOUND'
 }
 
+const dbClient = new DynamoDBClient({})
+
 async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<APIGatewayProxyResult> {
 
   let httpMethod:string;
-  switch(event.httpMethod){
-    case HTTPMETHOD.GET:
-      httpMethod = 'httpMethod used is ' + HTTPMETHOD.GET;
+  try{
+    switch(event.httpMethod){
+      case HTTPMETHOD.GET:
+        httpMethod = 'httpMethod used is ' + HTTPMETHOD.GET;
       break;
 
-    case HTTPMETHOD.POST:
-      httpMethod = 'httpMethod used is ' + HTTPMETHOD.POST;
-      break;
-    default:
-      httpMethod = HTTPMETHOD.NONE
-      break;
-  }
-  const response = {
-    statusCode:200,
-    body:JSON.stringify(httpMethod)
-  }
-  console.log(response.body)
+      case HTTPMETHOD.POST:
+        return await postspaces(event, dbClient)
+    }
 
-  return response;
+  } catch(error){
+    console.log(error);
+    return {
+      statusCode:500,
+      body:JSON.stringify(error)
+    }
+  }
+
+  return {
+    statusCode:404,
+    body:JSON.stringify('no http method found ' + event.httpMethod)
+  }
 }
 
 export {handler}

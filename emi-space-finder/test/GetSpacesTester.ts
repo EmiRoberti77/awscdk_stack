@@ -7,5 +7,8 @@ process.env.TABLE_NAME = 'SpaceTable-0e18ddc4064f'
 
 //method name inpoint for lambda coming from  ../src/services/spaces/handler
 handler({
-  httpMethod: 'GET'
+  httpMethod: 'GET',
+  queryStringParameters: {
+    id: '23f03f5c-7172-4e77-8183-599f03a920e7'
+}
 } as any,{} as any);

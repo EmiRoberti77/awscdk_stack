@@ -8,12 +8,13 @@ export async function getspaces(
   dbClient: DynamoDBClient): Promise<APIGatewayProxyResult> {
 
     if(event.queryStringParameters){
+      console.log("ID="+event.queryStringParameters[ID])
       if(ID in event.queryStringParameters){
         const spaceId = event.queryStringParameters[ID]
         const getItemResponse = await dbClient.send(new GetItemCommand({
-          TableName: 'your-table-name',
+          TableName: process.env.TABLE_NAME,
           Key: {
-            ID: { S: spaceId ? spaceId : ''} as AttributeValue
+            id: { S: spaceId ? spaceId : ''} as AttributeValue
           }
         }));
 
@@ -30,21 +31,21 @@ export async function getspaces(
           }
         }
       } else {
-        //return missing id
+        //no id, do a scan of database
+        const result = await dbClient.send(new ScanCommand({
+          TableName: process.env.TABLE_NAME
+        }))
+    
+        console.log(result.Items)
+    
         return {
-          statusCode:400,
-          body: JSON.stringify('ID required')
+          statusCode:200,
+          body: JSON.stringify(result.Items)
         }
       }
 
-      const result = await dbClient.send(new ScanCommand({
-        TableName: process.env.TABLE_NAME
-      }))
-  
-      console.log(result.Items)
-  
       return {
-        statusCode:200,
-        body: JSON.stringify(result.Items)
-      }
+        statusCode:400,
+        body: JSON.stringify('No queriers matched')
     }
+  }

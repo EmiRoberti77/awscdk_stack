@@ -13,13 +13,15 @@ const enum HTTPMETHOD {
 const dbClient = new DynamoDBClient({})
 
 async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<APIGatewayProxyResult> {
-
-  let httpMethod:string;
+  console.log(`++++++++++++++++= EMI =++++++++++++++++++++++`)
   try{
     switch(event.httpMethod){
       case HTTPMETHOD.GET:
-        return await getspaces(event, dbClient);
-
+        console.log('IN GET METHOD')
+        const response = await getspaces(event, dbClient);
+        console.log(response)
+        return response;
+        
       case HTTPMETHOD.POST:
         return await postspaces(event, dbClient)
     }

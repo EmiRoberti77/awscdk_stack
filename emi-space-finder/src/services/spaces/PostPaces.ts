@@ -1,6 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import {DynamoDBClient, PutItemCommand} from '@aws-sdk/client-dynamodb'
 import { v4 } from "uuid";
+import { marshall } from "@aws-sdk/util-dynamodb";
 
 export async function postspaces(
   event: APIGatewayProxyEvent, 
@@ -11,6 +12,7 @@ export async function postspaces(
 
     const result = await dbClient.send(new PutItemCommand({
       TableName: process.env.TABLE_NAME,
+      
       Item:{
         id:{
           S: randomId

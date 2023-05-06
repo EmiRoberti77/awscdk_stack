@@ -1,5 +1,6 @@
 import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda'
 import {AttributeValue, DynamoDBClient, GetItemCommand, ScanCommand} from '@aws-sdk/client-dynamodb'
+import {unmarshall} from '@aws-sdk/util-dynamodb'
 
 const ID: string = 'id';
 
@@ -8,7 +9,9 @@ export async function getspaces(
   dbClient: DynamoDBClient): Promise<APIGatewayProxyResult> {
 
     if(event.queryStringParameters){
-      console.log("ID="+event.queryStringParameters[ID])
+
+      console.log("id="+event.queryStringParameters[ID])
+
       if(ID in event.queryStringParameters){
         const spaceId = event.queryStringParameters[ID]
         const getItemResponse = await dbClient.send(new GetItemCommand({
@@ -19,9 +22,12 @@ export async function getspaces(
         }));
 
         if(getItemResponse.Item){
+
+          const unmarshalledItem = unmarshall(getItemResponse.Item)
+
           return {
             statusCode:200,
-            body: JSON.stringify(getItemResponse.Item)
+            body: JSON.stringify(unmarshalledItem)
           } 
         } else {
             return {

@@ -7,14 +7,17 @@ export async function updatesSpaces(
   event:APIGatewayProxyEvent, 
   dbClient:DynamoDBClient):Promise<APIGatewayProxyResult>{
   
-  //qulify all initial requirements
+  //qualify all initial requirements
   if(event.queryStringParameters && (ID in event.queryStringParameters) && event.body){
+
     const spaceId = event.queryStringParameters[ID];
-    const parsedBody = JSON.stringify(event.body);
+    //parse body first
+    const parsedBody = JSON.parse(event.body);
     //body is now parsed into JSON string
     console.log('body=', event.body)
     const keys = Object.keys(parsedBody);//get first param from the body (the location to update)
     console.log('keys', keys)
+
     const requestBodyKey = keys[0]
     const requestBodyValue = parsedBody[requestBodyKey as any];
 
@@ -29,11 +32,11 @@ export async function updatesSpaces(
       UpdateExpression: 'set #valNew = :new',
       ExpressionAttributeValues:{
         ':new':{
-          S: 'Torino'
+          S: requestBodyValue
         }
       },
       ExpressionAttributeNames: {
-        '#valNew': 'location'
+        '#valNew': requestBodyKey
       },
       ReturnValues:`UPDATED_NEW`
     }));

@@ -12,5 +12,5 @@ handler({
     id: '23f03f5c-7172-4e77-8183-599f03a920e7'
 },
 body:JSON.stringify({
-  location: 'Torino'
+  location: 'Bologna'
 })} as any,{} as any);

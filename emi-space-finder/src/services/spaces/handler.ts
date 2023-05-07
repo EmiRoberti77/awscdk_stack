@@ -3,6 +3,7 @@ import {DynamoDBClient} from '@aws-sdk/client-dynamodb';
 import {postspaces} from './PostPaces'
 import { getspaces } from "./GetSpaces";
 import { updatesSpaces } from "./UpdateSpaces";
+import { deleteSpaces } from "./DeleteSpaces";
 
 
 const enum HTTPMETHOD {
@@ -28,6 +29,9 @@ async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<
 
       case HTTPMETHOD.PUT:
         return await updatesSpaces(event, dbClient);
+
+      case HTTPMETHOD.DELETE:
+        return await deleteSpaces(event, dbClient);
     }
 
   } catch(error){

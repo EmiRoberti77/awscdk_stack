@@ -4,6 +4,7 @@ import {postspaces} from './PostPaces'
 import { getspaces } from "./GetSpaces";
 import { updatesSpaces } from "./UpdateSpaces";
 import { deleteSpaces } from "./DeleteSpaces";
+import { JSONError, MissingFieldError } from "../shared/Validator";
 
 
 const enum HTTPMETHOD {
@@ -36,6 +37,21 @@ async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<
 
   } catch(error){
     console.log(error);
+
+    if(error instanceof MissingFieldError){
+      return{
+        statusCode:400,
+        body:JSON.stringify(error.message)
+      }
+    }
+
+    if(error instanceof JSONError){
+      return{
+        statusCode:400,
+        body:JSON.stringify(error.message)
+      }
+    }
+    
     return {
       statusCode:500,
       body:JSON.stringify(error)

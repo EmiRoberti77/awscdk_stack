@@ -1,24 +1,51 @@
-import { Stack, StackProps } from "aws-cdk-lib";
-import { AttributeType, ITable, Table } from "aws-cdk-lib/aws-dynamodb";
-import { Scope } from "aws-cdk-lib/aws-ecs";
-import { Construct } from "constructs";
-import { initializeSuffix } from "../util";
+import { CfnOutput, Stack, StackProps } from 'aws-cdk-lib'
+import { AttributeType, ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { Construct } from 'constructs';
+import { initializeSuffix } from '../util';
+import { Bucket, BucketAccessControl, HttpMethods, IBucket } from 'aws-cdk-lib/aws-s3';
 
-export class DataStack extends Stack{
 
-  public readonly spaceTable: ITable;
+export class DataStack extends Stack {
 
-  constructor(scope:Construct, id:string, props?: StackProps){
-    super(scope, id, props);
+    public readonly spacesTable: ITable
+    //spublic readonly deploymentBucket: IBucket;
+    public readonly photosBucket: IBucket;
 
-    const suffix = initializeSuffix(this)
+    constructor(scope: Construct, id: string, props?: StackProps) {
+        super(scope, id, props);
 
-    this.spaceTable = new Table(this, 'SpaceTable', {
-      partitionKey: {
-        name: 'id',
-        type: AttributeType.STRING
-      },
-      tableName: `SpaceTable-${suffix}`
-    })
-  }
+        const suffix = initializeSuffix(this);
+
+        this.photosBucket = new Bucket(this, 'SpaceFinderPhotos', {
+            bucketName: `space-finder-photos-${suffix}`,
+            cors: [{
+                allowedMethods: [
+                    HttpMethods.HEAD,
+                    HttpMethods.GET,
+                    HttpMethods.PUT
+                ],
+                allowedOrigins: ['*'],
+                allowedHeaders: ['*']
+            }],
+            // accessControl: BucketAccessControl.PUBLIC_READ // currently not working,
+            blockPublicAccess: {
+                blockPublicAcls: false,
+                blockPublicPolicy: false,
+                ignorePublicAcls: false,
+                restrictPublicBuckets: false
+            }
+        });
+        new CfnOutput(this, 'SpaceFinderPhotosBucketName', {
+            value: this.photosBucket.bucketName
+        });
+
+
+        this.spacesTable = new Table(this, 'SpacesTable', {
+            partitionKey : {
+                name: 'id',
+                type: AttributeType.STRING
+            },
+            tableName: `SpaceTable-${suffix}`
+        })
+    }
 }

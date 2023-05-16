@@ -1,2 +1,4 @@
 node_modules
 cdk.out
+cdk_samples
+.DS_Store

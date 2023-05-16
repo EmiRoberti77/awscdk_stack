@@ -5,6 +5,7 @@ import { getspaces } from "./GetSpaces";
 import { updatesSpaces } from "./UpdateSpaces";
 import { deleteSpaces } from "./DeleteSpaces";
 import { JSONError, MissingFieldError } from "../shared/Validator";
+import { addCorsHeader } from "../shared/Util";
 
 
 const enum HTTPMETHOD {
@@ -18,50 +19,60 @@ const enum HTTPMETHOD {
 const dbClient = new DynamoDBClient({})
 
 async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<APIGatewayProxyResult> {
+  
+  let response:APIGatewayProxyResult;
+  
   try{
     switch(event.httpMethod){
       case HTTPMETHOD.GET:
-        const response = await getspaces(event, dbClient);
+        response = await getspaces(event, dbClient);
+
         console.log(response);
-        return response;
+        break;
         
       case HTTPMETHOD.POST:
-        return await postspaces(event, dbClient);
+        response = await postspaces(event, dbClient);
+        break;
 
       case HTTPMETHOD.PUT:
-        return await updatesSpaces(event, dbClient);
+        response = await updatesSpaces(event, dbClient);
+        break;
 
       case HTTPMETHOD.DELETE:
-        return await deleteSpaces(event, dbClient);
+        response = await deleteSpaces(event, dbClient);
+        break;
     }
 
   } catch(error){
     console.log(error);
 
     if(error instanceof MissingFieldError){
-      return{
+      response = {
         statusCode:400,
         body:JSON.stringify(error.message)
       }
     }
 
     if(error instanceof JSONError){
-      return{
+      response = {
         statusCode:400,
         body:JSON.stringify(error.message)
       }
     }
     
-    return {
+    response = {
       statusCode:500,
       body:JSON.stringify(error)
     }
   }
 
-  return {
+  response = {
     statusCode:404,
     body:JSON.stringify('no http method found ' + event.httpMethod)
   }
+
+  addCorsHeader(response);
+  return response;
 }
 
 export {handler}

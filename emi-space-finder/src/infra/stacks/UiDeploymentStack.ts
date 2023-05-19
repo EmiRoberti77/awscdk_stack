@@ -21,7 +21,7 @@ export class UiDeploymentStack extends Stack {
 
       //get project dist files for UI to deploy on the 
       //S3 bucket to be served from the internet
-      const uiDir = join(__dirname, '..', '..', '..', '..', 'emi-space-finder-frontend', 'dist');
+      const uiDir = join(__dirname, '..', '..', '..', '..', 'emi-space-finder-frontend', 'build');
       if(!existsSync(uiDir)){
         console.log(`${uiDir} does not exist`);
         return;

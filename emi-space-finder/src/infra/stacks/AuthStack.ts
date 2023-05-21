@@ -94,6 +94,7 @@ export class AuthStack extends Stack {
           'sts:AssumeRoleWithWebIdentity'
       )
   });
+  
   this.adminRole.addToPolicy(new PolicyStatement({
       effect: Effect.ALLOW,
       actions: [

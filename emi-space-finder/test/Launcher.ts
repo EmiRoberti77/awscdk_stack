@@ -3,7 +3,7 @@ import { handler } from "../src/services/spaces/handler"
 //using ts-node test/Launcher.ts ( relative path to root)
 
 process.env.AWS_REGION = 'us-east-1';
-process.env.TABLE_NAME = 'SpaceTable-0e18ddc4064f'
+process.env.TABLE_NAME = 'SpaceTable-1245202c105f'
 
 handler({
   httpMethod: 'POST',

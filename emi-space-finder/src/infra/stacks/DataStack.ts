@@ -2,7 +2,7 @@ import { CfnOutput, Stack, StackProps } from 'aws-cdk-lib'
 import { AttributeType, ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
 import { initializeSuffix } from '../util';
-import { Bucket, BucketAccessControl, HttpMethods, IBucket } from 'aws-cdk-lib/aws-s3';
+import { Bucket, BucketAccessControl, HttpMethods, IBucket, ObjectOwnership } from 'aws-cdk-lib/aws-s3';
 
 
 export class DataStack extends Stack {
@@ -27,7 +27,9 @@ export class DataStack extends Stack {
                 allowedOrigins: ['*'],
                 allowedHeaders: ['*']
             }],
+
             // accessControl: BucketAccessControl.PUBLIC_READ // currently not working,
+            objectOwnership: ObjectOwnership.OBJECT_WRITER,
             blockPublicAccess: {
                 blockPublicAcls: false,
                 blockPublicPolicy: false,
@@ -35,6 +37,8 @@ export class DataStack extends Stack {
                 restrictPublicBuckets: false
             }
         });
+
+        //get output of the buket name
         new CfnOutput(this, 'SpaceFinderPhotosBucketName', {
             value: this.photosBucket.bucketName
         });

@@ -23,6 +23,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<
   let response:APIGatewayProxyResult;
   
   try{
+
     switch(event.httpMethod){
       case HTTPMETHOD.GET:
         response = await getspaces(event, dbClient);
@@ -41,6 +42,11 @@ async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<
       case HTTPMETHOD.DELETE:
         response = await deleteSpaces(event, dbClient);
         break;
+      default:
+        response = {
+          statusCode:500,
+          body:JSON.stringify({message:'No httpMethod found'})
+        }
     }
 
   } catch(error){
@@ -51,24 +57,17 @@ async function handler(event: APIGatewayProxyEvent, context: Context) : Promise<
         statusCode:400,
         body:JSON.stringify(error.message)
       }
-    }
-
-    if(error instanceof JSONError){
+    }else if(error instanceof JSONError){
       response = {
         statusCode:400,
         body:JSON.stringify(error.message)
       }
+    } else {
+      response = {
+        statusCode:500,
+        body:JSON.stringify(error)
+      }
     }
-    
-    response = {
-      statusCode:500,
-      body:JSON.stringify(error)
-    }
-  }
-
-  response = {
-    statusCode:404,
-    body:JSON.stringify('no http method found ' + event.httpMethod)
   }
 
   addCorsHeader(response);

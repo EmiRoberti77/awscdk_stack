@@ -6,9 +6,10 @@ import LoginComponent from './components/LoginComponent';
 import { AuthService } from './service/AuthService';
 import CreateSpace from './components/CreateSpace';
 import { DataService } from './service/DataService';
+import Spaces from './components/Spaces';
 
 const authService = new AuthService();
-const dataService = new DataService();
+const dataService = new DataService(authService);
 
 function App() {
   const [userName, setUserName] = useState<string | undefined>(undefined);
@@ -40,7 +41,7 @@ function App() {
         },
         {
           path: "/spaces",
-          element: <div>Spaces page </div>,
+          element: <div><Spaces dataService={dataService}/></div>,
         },
       ]
     }

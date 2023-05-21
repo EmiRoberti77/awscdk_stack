@@ -1,6 +1,5 @@
 import React, {SyntheticEvent, useState} from 'react'
 import { DataService } from '../service/DataService'
-import { consumers } from 'stream';
 import { NavLink } from 'react-router-dom';
 
 const MISSING_PARAMS = 'Missing one of the following parameters: name, location or photo';
@@ -40,17 +39,11 @@ const CreateSpace:React.FC<CreateSpaceProps>= ({dataService}) => {
 
   const renderPhoto = () =>{
     if(photo){
-      console.log(photo)
       const locationUrl = URL.createObjectURL(photo);
-      console.log('locationUrl', locationUrl);
-      const imageElement = document.querySelector('img');
-      if(imageElement){
-        imageElement.src = locationUrl
-      }
       return (
         <>        
           <p>{locationUrl}</p>
-          <img src={locationUrl} alt={'image preview'} style={{maxWidth:'200px'}}/>
+          <img src={locationUrl} alt={'preview'} style={{maxWidth:'200px'}}/>
         </>
       )
     }

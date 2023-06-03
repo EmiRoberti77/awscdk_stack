@@ -37,8 +37,6 @@ export class ApiStack extends Stack {
 
     const spacesResources = api.root.addResource('spaces', optionsWithCors);
 
-    const apiDelete = new RestApi(this, 'deleteme');
-
     spacesResources.addMethod('GET', props.spacesLambdaIntegration, optionsWithAuth);
     spacesResources.addMethod('POST', props.spacesLambdaIntegration, optionsWithAuth);
     spacesResources.addMethod('PUT', props.spacesLambdaIntegration, optionsWithAuth);

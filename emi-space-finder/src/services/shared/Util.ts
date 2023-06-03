@@ -11,6 +11,10 @@ export function parseJSON(arg:string){
   }
 }
 
+export const emitest = ()=>{
+  return 1;
+}
+
 export function createRaddomID(){
   return randomUUID()
 }

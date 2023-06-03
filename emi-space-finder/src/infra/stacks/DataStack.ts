@@ -8,6 +8,7 @@ import { Bucket, BucketAccessControl, HttpMethods, IBucket, ObjectOwnership } fr
 export class DataStack extends Stack {
 
     public readonly spacesTable: ITable
+    //spublic readonly deploymentBucket: IBucket;
     public readonly photosBucket: IBucket;
 
     constructor(scope: Construct, id: string, props?: StackProps) {
